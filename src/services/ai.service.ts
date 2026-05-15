@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-const AI_MODEL = process.env.AI_MODEL || 'openai/gpt-3.5-turbo';
+const AI_MODEL = process.env.AI_MODEL || 'liquid/lfm-2.5-1.2b-instruct:free';
 
 export interface AIResponse {
   summary: string;
@@ -58,7 +58,13 @@ export async function generateAIInsights(content: string): Promise<AIResponse> {
       }
     );
 
-    const resultText = response.data.choices[0].message.content;
+    let resultText = response.data.choices[0].message.content;
+    
+    // Clean up resultText if it contains markdown code blocks
+    if (resultText.includes('```')) {
+      resultText = resultText.replace(/```json/g, '').replace(/```/g, '').trim();
+    }
+
     return JSON.parse(resultText) as AIResponse;
   } catch (error: any) {
     console.error('AI generation error:', error.response?.data || error.message);
