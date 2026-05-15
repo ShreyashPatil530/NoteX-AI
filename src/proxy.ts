@@ -7,7 +7,7 @@ import { cookies } from 'next/headers';
 // For simplicity, we'll check if the cookie exists. 
 // In production, you'd use jose or similar for Edge-compatible JWT verification.
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // Define public paths
