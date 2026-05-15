@@ -15,10 +15,10 @@ export async function generateAIInsights(content: string): Promise<AIResponse> {
   }
 
   const prompt = `
-    Analyze the following note content and provide:
-    1. A concise summary.
-    2. A list of actionable items (if any).
-    3. A suggested improved title for the note.
+    Analyze the following note content and provide a professional, deep analysis:
+    1. A concise yet comprehensive summary (2-3 sentences).
+    2. A list of 3-5 actionable items. Even if the note is short, suggest next steps like "Research more on this", "Expand this idea", or "Set a deadline".
+    3. A creative and professional improved title that sounds like a SaaS product feature or a formal project name.
 
     Return the response in STRICT JSON format:
     {

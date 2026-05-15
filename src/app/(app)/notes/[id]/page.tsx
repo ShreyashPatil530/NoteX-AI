@@ -251,8 +251,9 @@ export default function NoteEditor() {
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 100 }}
-            className="fixed right-0 top-0 w-96 h-full glass-card rounded-none border-l border-white/10 p-8 z-[60] overflow-y-auto"
+            className="fixed right-0 top-0 w-96 h-full bg-[#0B0F19]/90 backdrop-blur-2xl border-l border-white/10 p-8 z-[60] shadow-2xl overflow-y-auto"
           >
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-primary"></div>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                 <Sparkles className="text-primary" />
@@ -274,29 +275,52 @@ export default function NoteEditor() {
               <div>
                 <h3 className="text-sm font-bold text-secondary uppercase tracking-widest mb-4">Action Items</h3>
                 <ul className="space-y-3">
-                  {note.aiInsights.action_items?.map((item: string, idx: number) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm text-text-secondary bg-white/5 p-3 rounded-xl border border-white/5">
-                      <div className="mt-1 w-5 h-5 rounded bg-secondary/20 flex items-center justify-center shrink-0">
-                        <Check size={12} className="text-secondary" />
-                      </div>
-                      {item}
+                  {note.aiInsights.action_items?.length > 0 ? (
+                    note.aiInsights.action_items.map((item: string, idx: number) => (
+                      <li key={idx} className="flex items-start gap-3 text-sm text-text-secondary bg-white/5 p-3 rounded-xl border border-white/5 hover:border-secondary/30 transition-colors">
+                        <div className="mt-1 w-5 h-5 rounded bg-secondary/20 flex items-center justify-center shrink-0">
+                          <Check size={12} className="text-secondary" />
+                        </div>
+                        {item}
+                      </li>
+                    ))
+                  ) : (
+                    <li className="text-sm text-text-secondary italic bg-white/5 p-4 rounded-xl border border-white/5 text-center">
+                      No specific action items identified. Try expanding your note!
                     </li>
-                  ))}
+                  )}
                 </ul>
               </div>
 
               <div>
                 <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-widest mb-4">Suggested Title</h3>
-                <div className="p-4 rounded-xl bg-white/5 border border-white/5 flex justify-between items-center">
-                  <p className="text-white font-medium italic">"{note.aiInsights.suggested_title}"</p>
-                  <Button variant="ghost" size="sm" className="text-primary" onClick={() => setTitle(note.aiInsights.suggested_title)}>
-                    Apply
+                <div className="p-4 rounded-xl bg-white/5 border border-white/5 flex flex-col gap-4">
+                  <p className="text-white font-medium italic text-center">"{note.aiInsights.suggested_title}"</p>
+                  <Button 
+                    variant="secondary" 
+                    size="sm" 
+                    className="w-full gap-2" 
+                    onClick={() => {
+                      setTitle(note.aiInsights.suggested_title);
+                      // Visual feedback could be added here
+                    }}
+                  >
+                    <Check size={16} /> Apply New Title
                   </Button>
                 </div>
               </div>
             </div>
             
-            <div className="mt-12 pt-8 border-t border-white/5">
+            <div className="mt-12 pt-8 border-t border-white/5 space-y-6">
+              <Button 
+                variant="outline" 
+                className="w-full gap-2 border-primary/20 hover:bg-primary/5"
+                onClick={generateAI}
+                isLoading={aiLoading}
+              >
+                <Sparkles size={16} className="text-primary" />
+                Regenerate Insights
+              </Button>
               <p className="text-[10px] text-text-secondary text-center uppercase tracking-widest">
                 AI can make mistakes. Please verify important information.
               </p>
