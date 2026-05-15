@@ -272,7 +272,8 @@ export default function NoteEditor() {
                 className="w-full py-4 shadow-lg shadow-primary/20 gap-2 text-base"
                 onClick={() => {
                   const existingTags = note.tags || [];
-                  const newTags = [...new Set([...existingTags, ...note.aiInsights.suggested_tags])];
+                  const suggestedTags = note.aiInsights.suggested_tags || [];
+                  const newTags = [...new Set([...existingTags, ...suggestedTags])];
                   setTitle(note.aiInsights.suggested_title);
                   saveNote({ 
                     title: note.aiInsights.suggested_title,
@@ -344,15 +345,16 @@ export default function NoteEditor() {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className={`w-full gap-2 border-cyan-500/20 hover:bg-cyan-500/10 text-xs h-9 ${note.aiInsights.suggested_tags?.every((t: string) => note.tags?.includes(t)) ? 'bg-cyan-500/10 text-cyan-400' : ''}`}
+                  className={`w-full gap-2 border-cyan-500/20 hover:bg-cyan-500/10 text-xs h-9 ${(note.aiInsights.suggested_tags || []).every((t: string) => note.tags?.includes(t)) ? 'bg-cyan-500/10 text-cyan-400' : ''}`}
                   onClick={() => {
                     const existingTags = note.tags || [];
-                    const newTags = [...new Set([...existingTags, ...note.aiInsights.suggested_tags])];
+                    const suggestedTags = note.aiInsights.suggested_tags || [];
+                    const newTags = [...new Set([...existingTags, ...suggestedTags])];
                     saveNote({ tags: newTags });
                   }}
                 >
-                  {note.aiInsights.suggested_tags?.every((t: string) => note.tags?.includes(t)) ? <Check size={14} /> : <Plus size={14} />}
-                  {note.aiInsights.suggested_tags?.every((t: string) => note.tags?.includes(t)) ? 'All Tags Added' : 'Add All Suggested Tags'}
+                  {(note.aiInsights.suggested_tags || []).every((t: string) => note.tags?.includes(t)) ? <Check size={14} /> : <Plus size={14} />}
+                  {(note.aiInsights.suggested_tags || []).every((t: string) => note.tags?.includes(t)) ? 'All Tags Added' : 'Add All Suggested Tags'}
                 </Button>
               </div>
             </div>
