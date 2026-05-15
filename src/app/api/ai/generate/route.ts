@@ -37,9 +37,14 @@ export async function POST(req: Request) {
       lastGenerated: new Date(),
     };
     
-    // Optional: Update title if suggested_title is provided and title is generic
+    // Auto-apply title if generic
     if (insights.suggested_title && (note.title === 'Untitled Note' || !note.title)) {
       note.title = insights.suggested_title;
+    }
+
+    // Auto-apply tags if none exist
+    if (insights.suggested_tags && insights.suggested_tags.length > 0 && note.tags.length === 0) {
+      note.tags = insights.suggested_tags;
     }
 
     await note.save();

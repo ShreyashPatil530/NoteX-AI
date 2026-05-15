@@ -29,6 +29,7 @@ const NoteSchema = new mongoose.Schema({
     summary: String,
     action_items: [String],
     suggested_title: String,
+    suggested_tags: [String],
     lastGenerated: Date,
   },
   createdAt: {

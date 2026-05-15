@@ -96,6 +96,7 @@ export default function NoteEditor() {
       const res = await axios.post('/api/ai/generate', { noteId: id });
       setNote(res.data);
       setTitle(res.data.title);
+      // If AI updated tags, we should reflect that locally if we want
       setShowAiModal(true);
     } catch (err) {
       console.error('AI generation failed', err);
@@ -295,19 +296,44 @@ export default function NoteEditor() {
               <div>
                 <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-widest mb-4">Suggested Title</h3>
                 <div className="p-4 rounded-xl bg-white/5 border border-white/5 flex flex-col gap-4">
-                  <p className="text-white font-medium italic text-center">"{note.aiInsights.suggested_title}"</p>
-                  <Button 
-                    variant="secondary" 
-                    size="sm" 
-                    className="w-full gap-2" 
-                    onClick={() => {
-                      setTitle(note.aiInsights.suggested_title);
-                      // Visual feedback could be added here
-                    }}
-                  >
-                    <Check size={16} /> Apply New Title
-                  </Button>
+                  <div className="text-center">
+                    <p className="text-white font-medium italic mb-2">"{note.aiInsights.suggested_title}"</p>
+                    <Button 
+                      variant="secondary" 
+                      size="sm" 
+                      className="w-full gap-2 h-9 text-xs" 
+                      onClick={() => {
+                        setTitle(note.aiInsights.suggested_title);
+                      }}
+                    >
+                      <Check size={14} /> Apply Title
+                    </Button>
+                  </div>
                 </div>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-widest mb-4">Suggested Tags</h3>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {note.aiInsights.suggested_tags?.map((tag: string) => (
+                    <span key={tag} className="px-2 py-1 rounded-md bg-cyan-500/10 text-cyan-400 text-[10px] font-bold uppercase tracking-wider border border-cyan-500/20">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full gap-2 border-cyan-500/20 hover:bg-cyan-500/10 text-xs h-9" 
+                  onClick={() => {
+                    const existingTags = note.tags || [];
+                    const newTags = [...new Set([...existingTags, ...note.aiInsights.suggested_tags])];
+                    saveNote({ tags: newTags });
+                  }}
+                >
+                  <Plus size={14} /> Add All Suggested Tags
+                </Button>
+              </div>
               </div>
             </div>
             

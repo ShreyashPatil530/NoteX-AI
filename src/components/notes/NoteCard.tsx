@@ -41,7 +41,16 @@ const NoteCard = ({ note, onClick, onShare }: NoteCardProps) => {
       </div>
 
       <p className="text-text-secondary text-sm line-clamp-3 flex-1 mb-4">
-        {note.content || 'No content yet...'}
+        {note.aiInsights?.summary ? (
+          <span className="flex flex-col gap-1">
+            <span className="text-[10px] text-primary font-bold uppercase tracking-widest flex items-center gap-1 mb-1">
+              <Sparkles size={10} /> AI Summary
+            </span>
+            {note.aiInsights.summary}
+          </span>
+        ) : (
+          note.content || 'No content yet...'
+        )}
       </p>
 
       <div className="flex flex-wrap gap-2 mb-4">
