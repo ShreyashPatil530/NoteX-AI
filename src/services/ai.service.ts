@@ -16,11 +16,11 @@ export async function generateAIInsights(content: string): Promise<AIResponse> {
   }
 
   const prompt = `
-    Analyze the following note content and provide a professional, deep analysis:
-    1. A concise yet comprehensive summary (2-3 sentences).
-    2. A list of 3-5 actionable items. Even if the note is short, suggest next steps.
-    3. A creative and professional improved title.
-    4. A list of 3-5 relevant tags (keywords).
+    Analyze the following note content and provide a professional, strategic analysis:
+    1. A goal-oriented summary (3-4 sentences). Focus on what the user is trying to achieve (the "User Intent") and why it matters.
+    2. A list of 3-5 actionable milestones. These should be high-level strategic steps based on the context.
+    3. A creative and professional project-style title.
+    4. A list of 5-8 relevant tags including context-based tags (e.g., #Strategy, #Automation, #Launch).
 
     Return the response in STRICT JSON format:
     {
