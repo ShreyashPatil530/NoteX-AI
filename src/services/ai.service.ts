@@ -68,7 +68,13 @@ export async function generateAIInsights(content: string): Promise<AIResponse> {
       resultText = resultText.replace(/```json/g, '').replace(/```/g, '').trim();
     }
 
-    return JSON.parse(resultText) as AIResponse;
+    const parsed = JSON.parse(resultText) as AIResponse;
+    
+    // Ensure arrays are actually arrays (defensive programming for small models)
+    if (!Array.isArray(parsed.action_items)) parsed.action_items = [];
+    if (!Array.isArray(parsed.suggested_tags)) parsed.suggested_tags = [];
+
+    return parsed;
   } catch (error: any) {
     console.error('AI generation error:', error.response?.data || error.message);
     throw new Error('Failed to generate AI insights');

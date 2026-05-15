@@ -288,9 +288,23 @@ export default function NoteEditor() {
             <div className="space-y-8">
               <div>
                 <h3 className="text-sm font-bold text-primary uppercase tracking-widest mb-4">Summary</h3>
-                <p className="text-text-secondary leading-relaxed bg-white/5 p-4 rounded-xl border border-white/5">
-                  {note.aiInsights.summary}
-                </p>
+                <div className="space-y-4">
+                  <p className="text-text-secondary leading-relaxed bg-white/5 p-4 rounded-xl border border-white/5">
+                    {note.aiInsights.summary}
+                  </p>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full gap-2 border-primary/20 hover:bg-primary/10 text-xs h-9"
+                    onClick={() => {
+                      const newContent = `Summary: ${note.aiInsights.summary}\n\n${content}`;
+                      setContent(newContent);
+                      saveNote({ content: newContent });
+                    }}
+                  >
+                    <Plus size={14} /> Add Summary to Note
+                  </Button>
+                </div>
               </div>
 
               <div>
