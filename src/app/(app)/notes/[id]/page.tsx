@@ -260,9 +260,28 @@ export default function NoteEditor() {
                 <Sparkles className="text-primary" />
                 AI Insights
               </h2>
-              <button onClick={() => setShowAiModal(false)} className="p-2 rounded-xl hover:bg-white/5">
+              <button onClick={() => setShowAiModal(false)} className="p-2 rounded-xl hover:bg-white/5 transition-colors">
                 <X size={20} />
               </button>
+            </div>
+
+            {/* Apply All Action */}
+            <div className="mb-8">
+              <Button 
+                variant="gradient" 
+                className="w-full py-4 shadow-lg shadow-primary/20 gap-2 text-base"
+                onClick={() => {
+                  const existingTags = note.tags || [];
+                  const newTags = [...new Set([...existingTags, ...note.aiInsights.suggested_tags])];
+                  setTitle(note.aiInsights.suggested_title);
+                  saveNote({ 
+                    title: note.aiInsights.suggested_title,
+                    tags: newTags 
+                  });
+                }}
+              >
+                <Check size={20} /> Apply All Suggestions
+              </Button>
             </div>
 
             <div className="space-y-8">
@@ -295,18 +314,19 @@ export default function NoteEditor() {
 
               <div>
                 <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-widest mb-4">Suggested Title</h3>
-                <div className="p-4 rounded-xl bg-white/5 border border-white/5 flex flex-col gap-4">
+                <div className="p-4 rounded-xl bg-white/5 border border-white/5 flex flex-col gap-4 group hover:border-emerald-500/30 transition-colors">
                   <div className="text-center">
-                    <p className="text-white font-medium italic mb-2">"{note.aiInsights.suggested_title}"</p>
+                    <p className="text-white font-medium italic mb-4">"{note.aiInsights.suggested_title}"</p>
                     <Button 
-                      variant="secondary" 
+                      variant="outline" 
                       size="sm" 
-                      className="w-full gap-2 h-9 text-xs" 
+                      className={`w-full gap-2 h-9 text-xs border-emerald-500/20 hover:bg-emerald-500/10 ${title === note.aiInsights.suggested_title ? 'bg-emerald-500/10 text-emerald-400' : ''}`}
                       onClick={() => {
                         setTitle(note.aiInsights.suggested_title);
                       }}
                     >
-                      <Check size={14} /> Apply Title
+                      {title === note.aiInsights.suggested_title ? <Check size={14} /> : <Plus size={14} />}
+                      {title === note.aiInsights.suggested_title ? 'Applied' : 'Apply Title'}
                     </Button>
                   </div>
                 </div>
@@ -324,14 +344,15 @@ export default function NoteEditor() {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="w-full gap-2 border-cyan-500/20 hover:bg-cyan-500/10 text-xs h-9" 
+                  className={`w-full gap-2 border-cyan-500/20 hover:bg-cyan-500/10 text-xs h-9 ${note.aiInsights.suggested_tags?.every((t: string) => note.tags?.includes(t)) ? 'bg-cyan-500/10 text-cyan-400' : ''}`}
                   onClick={() => {
                     const existingTags = note.tags || [];
                     const newTags = [...new Set([...existingTags, ...note.aiInsights.suggested_tags])];
                     saveNote({ tags: newTags });
                   }}
                 >
-                  <Plus size={14} /> Add All Suggested Tags
+                  {note.aiInsights.suggested_tags?.every((t: string) => note.tags?.includes(t)) ? <Check size={14} /> : <Plus size={14} />}
+                  {note.aiInsights.suggested_tags?.every((t: string) => note.tags?.includes(t)) ? 'All Tags Added' : 'Add All Suggested Tags'}
                 </Button>
               </div>
             </div>
