@@ -334,7 +334,6 @@ export default function NoteEditor() {
                   <Plus size={14} /> Add All Suggested Tags
                 </Button>
               </div>
-              </div>
             </div>
             
             <div className="mt-12 pt-8 border-t border-white/5 space-y-6">
